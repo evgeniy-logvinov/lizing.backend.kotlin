@@ -55,7 +55,14 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 // Don't need for API CSRF Protection
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/v1/test/**").permitAll()
+//                .antMatchers("/api/v1/roles/**").permitAll()
+//                Some of User or Admin role
+                .antMatchers("/api/v1/roles/user/**").hasAnyRole("USER", "ADMIN")
+//                Only Admin role
+                .antMatchers("/api/v1/roles/admin/**").hasRole("ADMIN")
+                .antMatchers("/api/v1/authority/read/**").hasAuthority("READ_PRIVILEGE")
+//                Any Roles
+                .antMatchers("/api/v1/roles/**").permitAll()
 // All requests need to be authenticated
                 .anyRequest().authenticated()
 //                Use only basic auth
