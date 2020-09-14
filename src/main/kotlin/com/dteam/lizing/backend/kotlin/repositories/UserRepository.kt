@@ -14,7 +14,7 @@ interface UserRepository: JpaRepository<User, Long> {
 
     fun findByUsername(@Param("username") username: String): Optional<User>
 
-    fun findOneByUserName(username: String): User?
+    fun findOneByUsername(username: String): User?
 
     fun findByEmail(@Param("email") email: String): Optional<User>
 
