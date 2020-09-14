@@ -10,21 +10,15 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.concurrent.atomic.AtomicLong
 
 @RestController
-@RequestMapping("/api/v1/test")
-class BackendController {
+@RequestMapping("/api/v1/roles")
+class RolesController {
 
-    val counter = AtomicLong()
+    @GetMapping("/")
+    fun getNone() = "NONE"
 
-    @GetMapping("/greeting")
-    fun greeting(@RequestParam(value = "name", defaultValue = "World") name: String) =
-            Greeting(counter.incrementAndGet(), "Hello, $name")
+    @GetMapping("/user")
+    fun getUser() = "USER"
 
-    @Autowired
-    lateinit var personRepository: UserRepository
-
-    @GetMapping("/persons")
-    fun getPersons() = personRepository.findAll()
-
-    @GetMapping("/test")
-    fun getTests() = "Test"
+    @GetMapping("/admin")
+    fun getAdmin() = "ADMIN"
 }
