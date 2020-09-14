@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
+//https://habr.com/ru/company/otus/blog/488418/
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -22,18 +23,18 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     @Autowired
     internal var userDetailsService: UserDetailsServiceImpl? = null
 
-    @Autowired
-    private val unauthorizedHandler: JwtAuthEntryPoint? = null
+//    @Autowired
+//    private val unauthorizedHandler: JwtAuthEntryPoint? = null
 
     @Bean
     fun bCryptPasswordEncoder(): BCryptPasswordEncoder {
         return BCryptPasswordEncoder()
     }
 
-    @Bean
-    fun authenticationJwtTokenFilter(): JwtAuthTokenFilter {
-        return JwtAuthTokenFilter()
-    }
+//    @Bean
+//    fun authenticationJwtTokenFilter(): JwtAuthTokenFilter {
+//        return JwtAuthTokenFilter()
+//    }
 
     @Throws(Exception::class)
     override fun configure(authenticationManagerBuilder: AuthenticationManagerBuilder) {
@@ -50,13 +51,28 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
-        http.csrf().disable().authorizeRequests()
-                .antMatchers("/**").permitAll()
+        http
+// Don't need for API CSRF Protection
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/api/v1/test/**").permitAll()
+// All requests need to be authenticated
                 .anyRequest().authenticated()
-                .and()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)
+//                Use only basic auth
+                .and().httpBasic()
+//                Don't save info about users for api
+                .and().sessionManagement().disable();
+//        http
+//            .authorizeRequests()
+//            .antMatchers("/home").permitAll()
+//            .anyRequest().authenticated();
+//        http.csrf().disable().authorizeRequests()
+//                .antMatchers("/**").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//
+//        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)
     }
 }

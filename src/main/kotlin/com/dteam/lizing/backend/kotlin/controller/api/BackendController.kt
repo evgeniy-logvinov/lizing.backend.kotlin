@@ -4,17 +4,27 @@ import com.dteam.lizing.backend.kotlin.entities.Greeting
 import com.dteam.lizing.backend.kotlin.repositories.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 import java.util.concurrent.atomic.AtomicLong
 
-val counter = AtomicLong()
+@RestController
+@RequestMapping("/api/v1/test")
+class BackendController {
 
-@GetMapping("/greeting")
-fun greeting(@RequestParam(value = "name", defaultValue = "World") name: String) =
-        Greeting(counter.incrementAndGet(), "Hello, $name")
+    val counter = AtomicLong()
 
-@Autowired
-lateinit var personRepository: UserRepository
+    @GetMapping("/greeting")
+    fun greeting(@RequestParam(value = "name", defaultValue = "World") name: String) =
+            Greeting(counter.incrementAndGet(), "Hello, $name")
 
-@GetMapping("/persons")
-fun getPersons() = personRepository.findAll()
+    @Autowired
+    lateinit var personRepository: UserRepository
+
+    @GetMapping("/persons")
+    fun getPersons() = personRepository.findAll()
+
+    @GetMapping("/test")
+    fun getTests() = "Test"
+}
