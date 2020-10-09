@@ -5,12 +5,10 @@ import javax.persistence.*
 @Entity
 @Table(name = "privilege")
 data class Privilege (
-
+        @Column(nullable = false)
+        val name: String
+) {
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long? = 0,
-
-        @Column(name="name", nullable = false)
-        val name: String? = null
-
-)
+        @GeneratedValue
+        val id: Long = 0
+}

@@ -10,15 +10,15 @@ import javax.transaction.Transactional
 @Repository
 interface UserRepository: JpaRepository<User, Long> {
 
-    fun existsByUsername(@Param("username") username: String): Boolean
+    fun existsByUserName(@Param("userName") userName: String): Boolean
 
-    fun findByUsername(@Param("username") username: String): Optional<User>
+    fun findByUserName(@Param("userName") userName: String): Optional<User>
 
-    fun findOneByUsername(username: String): User?
+    fun findOneByUserName(userName: String): User?
 
     fun findByEmail(@Param("email") email: String): Optional<User>
 
     @Transactional
-    fun deleteByUsername(@Param("username") username: String)
+    fun deleteByUserName(@Param("userName") userName: String)
 
 }

@@ -5,13 +5,8 @@ import javax.persistence.*
 @Entity
 @Table(name = "roles")
 data class Role(
-
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long? = 0,
-
-        @Column(name = "name", nullable = false)
-        val name: String? = null,
+        @Column(nullable = false)
+        val name: String,
 
         @ManyToMany(fetch = FetchType.EAGER)
         @JoinTable(
@@ -20,5 +15,8 @@ data class Role(
                 inverseJoinColumns = [JoinColumn(name = "privilege_id", referencedColumnName = "id")]
         )
         var privilege: Collection<Privilege>? = null
-
-)
+) {
+    @Id
+    @GeneratedValue
+    val id: Long = 0
+}

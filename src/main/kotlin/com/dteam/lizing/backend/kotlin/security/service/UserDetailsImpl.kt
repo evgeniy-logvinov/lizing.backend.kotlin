@@ -7,7 +7,6 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
-import java.util.stream.Collectors
 
 
 class UserDetailsImpl(private val user: User) : UserDetails {
@@ -24,9 +23,16 @@ class UserDetailsImpl(private val user: User) : UserDetails {
         return privileges
     }
 
+    fun getGrantedAuthorities(privileges: List<String>): MutableCollection<out GrantedAuthority> {
+        val authorities: MutableList<GrantedAuthority> = ArrayList()
+        for (privilege in privileges) {
+            authorities.add(SimpleGrantedAuthority(privilege))
+        }
+        return authorities
+    }
 
-    override fun getAuthorities(): Collection<GrantedAuthority?> {
-        return user.roles!!.stream().map { role -> SimpleGrantedAuthority(role.name) }.collect(Collectors.toList<GrantedAuthority>())
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
+        return getGrantedAuthorities(getPrivileges(user.roles!!)!!)
     }
 
     override fun getPassword(): String {
@@ -34,7 +40,7 @@ class UserDetailsImpl(private val user: User) : UserDetails {
     }
 
     override fun getUsername(): String {
-        return user.username!!
+        return user.userName!!
     }
 
     override fun isAccountNonExpired(): Boolean {
@@ -51,5 +57,5 @@ class UserDetailsImpl(private val user: User) : UserDetails {
 
     override fun isEnabled(): Boolean {
         return false
-    } //...
+    }
 }

@@ -4,29 +4,14 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "users")
-data class User (
-
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long? = 0,
-
-        @Column(name="username", nullable = false)
-        var username: String?=null,
-
-        @Column(name="first_name")
-        var firstName: String?=null,
-
-        @Column(name="last_name")
-        var lastName: String?=null,
-
-        @Column(name="email")
-        var email: String?=null,
-
-        @Column(name="password")
-        var password: String?=null,
-
-        @Column(name="enabled")
-        var enabled: Boolean = false,
+data class User(
+        @Column(nullable = false)
+        var userName: String,
+        var firstName: String,
+        var lastName: String,
+        var email: String,
+        var password: String,
+        var enabled: Boolean,
 
         @ManyToMany(fetch = FetchType.EAGER)
         @JoinTable(
@@ -35,4 +20,9 @@ data class User (
                 inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")]
         )
         var roles: Collection<Role>? = null
-)
+) {
+
+    @Id
+    @GeneratedValue
+    var id: Long = 0
+}
